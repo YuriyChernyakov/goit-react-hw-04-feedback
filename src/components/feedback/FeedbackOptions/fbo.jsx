@@ -1,5 +1,5 @@
 import css from '../feedback.module.css';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 export const Fbo = ({ options, onLeaveFeedback }) => {
     return (
@@ -11,3 +11,8 @@ export const Fbo = ({ options, onLeaveFeedback }) => {
             })}
         </div>)
 }
+
+Fbo.propTypes = {
+  options: PropTypes.string.isRequired,
+  onLeaveFeedback: PropTypes.func.isRequired,
+};
