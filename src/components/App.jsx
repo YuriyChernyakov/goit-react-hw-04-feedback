@@ -1,68 +1,58 @@
-import { Component } from "react";
-import { Statistic } from '../components/feedback/Statistics/statistic';
-import { Fbo } from './feedback/FeedbackOptions/fbo';
-import { Section } from './feedback/Section/section';
+import { useState } from "react";
+import Statistic from '../components/feedback/Statistics/statistic';
+import Fbo from './feedback/FeedbackOptions/fbo';
+import Section from './feedback/Section/section';
 import css from '../components/feedback/feedback.module.css';
 
-export class App extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+export default function App() {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
-  total = () => {
-    return Object.values(this.state).reduce((acc, el) => {
-      return acc + el;
-    }, 0);
-  };
+  const nameFeedback = ['Good', 'Neutral', 'Bad'];
+  
+  const countTotalFeedback = good + neutral + bad;
 
-  countPercentage = () => {
-    return this.total() !== 0
-      ? Math.round((this.state.good / this.total()) * 100)
+  const countPercentage = () => {
+    return countTotalFeedback !== 0
+      ? Math.round((good / countTotalFeedback) * 100)
       : 0;
   };
 
-  onBtnClick=(key)=>{
-    this.setState((prevState) => {
-      return {
-        ...prevState,
-        [key]: (prevState[key] += 1)
-      };
-    });
-  }
+  const onBtnClick = e => {
+    switch (e.target.textContent) {
+      case 'Good':
+        setGood(prevGood => prevGood + 1);
+        break;
+      case 'Bad':
+        setBad(prevBad => prevBad + 1);
+        break;
+      case 'Neutral':
+        setNeutral(prevNeutral => prevNeutral + 1);
+        break;
+      default:
+        break;
+    }
+  };
 
-
-  render() {
-    const { bad, good, neutral } = this.state;
-    const {
-      total,
-      countPercentage,
-      onBtnClick,
-      state,
-    } = this;
-    const options = Object.keys(state);
-    return (
-      <div className={css.main}>
-        <Section title={'Please, leave feedback'}>
-          <Fbo
-            options={options}
-            onLeaveFeedback={onBtnClick}
+  return <div className={css.main}>
+    <Section title={'Please, leave feedback'}>
+    <Fbo
+        options={nameFeedback}
+        onLeaveFeedback={onBtnClick}
+      />
+      <span className={css.text}>Statistic:
+        {countTotalFeedback === 0 ? (
+          " There is no feedback"
+        ) : (
+          <Statistic
+            good={good}
+            bad={bad}
+            neutral={neutral}
+            total={countTotalFeedback}
+            positivePercentage={countPercentage()}
           />
-          <p className={css.text}>Statistic:
-          {total() === 0 ? (
-             " There is no feedback"
-          ) : (
-            <Statistic
-              good={good}
-              bad={bad}
-              neutral={neutral}
-              total={total()}
-              positivePercentage={countPercentage()}
-            />
-          )}</p>
-        </Section>
-      </div>
-    );
-  }
+        )}</span>
+    </Section>
+  </div>
 }

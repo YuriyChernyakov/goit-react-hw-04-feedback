@@ -1,18 +1,17 @@
 import css from '../feedback.module.css';
 import PropTypes from 'prop-types';
 
-export const Fbo = ({ options, onLeaveFeedback }) => {
+export default function Fbo ({ options, onLeaveFeedback }) {
     return (
         <div className={css.container}>
             {options.map(el => {
-                console.log(el);
                 return (
-                    <button type="button" className={css.button} key={el} onClick={()=>onLeaveFeedback(el)}>{el}</button>)
+                    <button type="button" className={css.button} key={el} onClick={onLeaveFeedback}>{el}</button>)
             })}
         </div>)
 }
 
 Fbo.propTypes = {
-  options: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
   onLeaveFeedback: PropTypes.func.isRequired,
 };

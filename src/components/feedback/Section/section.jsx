@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import css from '../feedback.module.css';
 
-export const Section = ({ title, children }) => {
+export default function Section ({ title, children }) {
   return (
     <>
       <p className={css.text}>{title}</p>
